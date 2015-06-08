@@ -1,12 +1,9 @@
 
-echom "about to load plugin"
 " Avoid installing twice.
 if exists('g:loaded_visualPagePercent')
     finish
 endif
 let g:loaded_visualPagePercent = 1
-
-echom "loaded my plugin"
 
 if !exists('g:visualPagePercent_window_char')
     let g:visualPagePercent_window_char = '●'
