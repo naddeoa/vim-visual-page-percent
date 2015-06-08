@@ -23,14 +23,21 @@ endif
 
 function! VisualPercent()
     " real numbers
-    let top = line("w0")
+    let top = line("w0") - 1
     let bottom = line("w$")
-    let total = line("$") * 1.0
+    let total = line("$")
     let visbleLines = bottom-top
 
     " display numbers
     let displayWidth = g:visualPagePercent_display_width
-    let displayWindowWidth = displayWidth / total * visbleLines
+    let scale = 1.0 * displayWidth / total
+
+    " ensure the display width is at least one so we retain a marker on
+    " very large files.
+    let displayWindowWidth = round(scale * visbleLines)
+    if displayWindowWidth < 1
+        let displayWindowWidth = 1
+    endif
 
     " create the window
     let i = 0
@@ -41,7 +48,7 @@ function! VisualPercent()
     endwhile
 
     " create display before visible section
-    let displayWidthBefore = displayWidth / total * top
+    let displayWidthBefore = round(scale * top)
     let displayBefore = ""
     while i < displayWidthBefore + displayWindowWidth
         let displayBefore .= g:visualPagePercent_before_window_char
